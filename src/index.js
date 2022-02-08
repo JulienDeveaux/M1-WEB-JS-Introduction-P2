@@ -14,13 +14,14 @@ export const Enumeration = function (keys) {
   return enumeration;
 };
 
-let myEnum = new Enumeration(['TEMPERATURE', 'HUMIDITY', 'LIGHT', 'SWITCH', 'DOOR']);
+let myEnum = new Enumeration(['TEMPERATURE', 'HUMIDITY', 'LIGHT', 'SWITCH', 'DOOR', 'FAN_SPEED']);
 
 
 export class Sensor {
   #id;
   #name;
   #data;
+  #singleValue;
   #type;
 
   constructor(type, id = 0, name = "new Sensor") {
@@ -28,6 +29,7 @@ export class Sensor {
     this.#name = name;
     this.#type = type;
     this.#data = new TimeSeries();
+    this.#singleValue = new Datnum();
   }
 
   get id() {
@@ -62,6 +64,7 @@ export class Sensor {
       case myEnum.LIGHT : return new Light();
       case myEnum.SWITCH : return new Switch();
       case myEnum.DOOR : return new Door();
+      case myEnum.FAN_SPEED : return new Fan();
     }
   }
 
@@ -79,6 +82,14 @@ export class Sensor {
 
   lastValue() {
     return this.#data.lastValue;
+  }
+
+  singleValue(value) {
+    this.#singleValue.singlevalue = value;
+  }
+
+  getSingleValue() {
+    return this.#singleValue.singlevalue;
   }
 }
 
@@ -103,6 +114,7 @@ export class Temperature extends Sensor {
     return super.lastValue();
   }
 }
+
 export class Humidity extends Sensor {
   constructor() {
     super();
@@ -124,6 +136,7 @@ export class Humidity extends Sensor {
     return super.lastValue();
   }
 }
+
 export class Light extends Sensor {
   constructor() {
     super();
@@ -145,11 +158,55 @@ export class Light extends Sensor {
     return super.lastValue();
   }
 }
-export class Switch extends Sensor {
 
+export class Fan extends Sensor {
+  constructor() {
+    super();
+  }
+
+  addEntry(value, label) {
+    super.addEntry(value, label);
+  }
+
+  labels() {
+    return super.labels();
+  }
+
+  values() {
+    return super.values();
+  }
+
+  lastValue() {
+    return super.lastValue();
+  }
 }
-export class Door extends Sensor {
 
+export class Switch extends Sensor {
+  constructor() {
+    super();
+  }
+
+  singleValue(value) {
+    super.singleValue(value);
+  }
+
+  getSingleValue() {
+    return super.getSingleValue();
+  }
+}
+
+export class Door extends Sensor {
+  constructor() {
+    super();
+  }
+
+  singleValue(value) {
+    super.singleValue(value);
+  }
+
+  getSingleValue() {
+    return super.getSingleValue();
+  }
 }
 
 export class Data {}

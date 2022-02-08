@@ -1,8 +1,8 @@
 const fs = require('fs').promises;
 
-import {Datnum, Enumeration, Humidity, Light, Sensor, Temperature, TimeSeries, version} from '.';
+import {Datnum, Door, Enumeration, Fan, Humidity, Light, Sensor, Switch, Temperature, TimeSeries, version} from '.';
 
-let myEnum = new Enumeration(['TEMPERATURE', 'HUMIDITY', 'LIGHT', 'SWITCH', 'DOOR']);
+let myEnum = new Enumeration(['TEMPERATURE', 'HUMIDITY', 'LIGHT', 'SWITCH', 'DOOR', 'FAN_SPEED']);
 
 let data;
 beforeAll(async () => {
@@ -13,6 +13,24 @@ beforeAll(async () => {
 });
 
 describe('Sensor model tests', () => {
+  describe('real sensor usage tests', () => {
+    test('instancing the json file', () => {
+      for(let i = 0; i < data.length; i++) {
+        let sensor = new Sensor(data[i].type, data[i].id, data[i].name).getSensor();
+
+        if(data[i].data.value === undefined) {
+          for(let j = 0; j < data[i].data.values.length; j++) {
+            sensor.addEntry(data[i].data.values[j], data[i].data.labels[j]);
+          }
+        } else {
+          sensor.singleValue(data[i].data.value);
+        }
+        expect(sensor).toBeDefined();
+      }
+    });
+  });
+
+
   describe('Dummy tests', () => {
     test('data is loaded with 3 elements', () => {
       expect(data.length).toBe(3);
@@ -88,6 +106,41 @@ describe('Sensor model tests', () => {
       expect(t.labels()).toStrictEqual(["name"]);
       expect(t.values()).toStrictEqual([20]);
       expect(t.lastValue()).toStrictEqual([20, "name"]);
+    });
+    test('Creating a fan sensor', () => {
+      let s = new Sensor(myEnum.FAN_SPEED);
+      let t = s.getSensor();
+      expect(Object.getPrototypeOf(t)).toBe(Fan.prototype);
+    });
+    test('add entry to fan', () => {
+      let s = new Sensor(myEnum.FAN_SPEED);
+      let t = s.getSensor();
+      t.addEntry(20, "name");
+      expect(t.labels()).toStrictEqual(["name"]);
+      expect(t.values()).toStrictEqual([20]);
+      expect(t.lastValue()).toStrictEqual([20, "name"]);
+    });
+    test('Creating a switch sensor', () => {
+      let s = new Sensor(myEnum.SWITCH);
+      let t = s.getSensor();
+      expect(Object.getPrototypeOf(t)).toBe(Switch.prototype);
+    });
+    test('add entry to switch', () => {
+      let s = new Sensor(myEnum.SWITCH);
+      let t = s.getSensor();
+      t.singleValue(50);
+      expect(t.getSingleValue()).toBe(50);
+    });
+    test('Creating a door sensor', () => {
+      let s = new Sensor(myEnum.DOOR);
+      let t = s.getSensor();
+      expect(Object.getPrototypeOf(t)).toBe(Door.prototype);
+    });
+    test('add entry to door', () => {
+      let s = new Sensor(myEnum.DOOR);
+      let t = s.getSensor();
+      t.singleValue(50);
+      expect(t.getSingleValue()).toBe(50);
     });
   });
 
