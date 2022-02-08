@@ -1,20 +1,33 @@
 export const version = () => '1.0.0';
 
-const myEnum = [
-  'TEMPERATURE',
-  'HUMIDITY',
-  'LIGHT',
-  'SWITCH',
-  'DOOR'
-];
+export const Enumeration = function (keys) {
+  const enumeration = Object.create(null);
+  for (const key of keys) {
+    enumeration[key] = key;
+  }
+  enumeration[Symbol.iterator] = function* () {
+    for (const key of keys) {
+      yield enumeration[key];
+    }
+  };
+  Object.freeze(enumeration);
+  return enumeration;
+};
+
+let myEnum = new Enumeration(['TEMPERATURE', 'HUMIDITY', 'LIGHT', 'SWITCH', 'DOOR']);
+
 
 export class Sensor {
   #id;
   #name;
+  #data;
+  #type;
 
-  constructor(id = 0, name = "new Sensor") {
+  constructor(type, id = 0, name = "new Sensor") {
     this.#id = id;
     this.#name = name;
+    this.#type = type;
+    this.#data = new TimeSeries();
   }
 
   get id() {
@@ -41,11 +54,69 @@ export class Sensor {
     }
     this.#name = name;
   }
+
+  getSensor() {
+    switch (this.#type) {
+      case myEnum.TEMPERATURE : return new Temperature();
+      case myEnum.HUMIDITY : return new Humidity();
+      case myEnum.LIGHT : return new Light();
+      case myEnum.SWITCH : return new Switch();
+      case myEnum.DOOR : return new Door();
+    }
+  }
+
+  addEntry(value, label) {
+    this.#data.addEntry(value, label);
+  }
+
+  labels() {
+    return this.#data.labels;
+  }
+
+  values() {
+    return this.#data.values;
+  }
+
+  lastValue() {
+    return this.#data.lastValue;
+  }
 }
 
-export class Data {
+export class Temperature extends Sensor {
+  constructor() {
+    super();
+  }
+
+  addEntry(value, label) {
+    super.addEntry(value, label);
+  }
+
+  labels() {
+    return super.labels();
+  }
+
+  values() {
+    return super.values();
+  }
+
+  lastValue() {
+    return super.lastValue();
+  }
+}
+export class Humidity extends Sensor {
 
 }
+export class Light extends Sensor {
+
+}
+export class Switch extends Sensor {
+
+}
+export class Door extends Sensor {
+
+}
+
+export class Data {}
 
 export class TimeSeries extends Data {
   #values;
@@ -56,7 +127,6 @@ export class TimeSeries extends Data {
     this.#labels = [];
     this.#values = [];
   }
-
 
   get values() {
     return this.#values;
@@ -83,5 +153,21 @@ export class TimeSeries extends Data {
 }
 
 export class Datnum extends Data {
+  #Singlevalue;
 
+  constructor() {
+    super();
+    this.#Singlevalue = 0;
+  }
+
+  set Singlevalue(value) {
+    if(typeof value !== "number") {
+      throw new Error("value must be a number");
+    }
+    this.#Singlevalue = value;
+  }
+
+  get Singlevalue() {
+    return this.#Singlevalue;
+  }
 }
