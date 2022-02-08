@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 
-import {Datnum, Enumeration, Sensor, Temperature, TimeSeries, version} from '.';
+import {Datnum, Enumeration, Humidity, Light, Sensor, Temperature, TimeSeries, version} from '.';
 
 let myEnum = new Enumeration(['TEMPERATURE', 'HUMIDITY', 'LIGHT', 'SWITCH', 'DOOR']);
 
@@ -55,13 +55,34 @@ describe('Sensor model tests', () => {
       let t = s.getSensor();
       expect(Object.getPrototypeOf(t)).toBe(Temperature.prototype);
     });
-    test('Creating a temperature sensor', () => {
-      let s = new Sensor(myEnum.TEMPERATURE);
-      let t = s.getSensor();
-      expect(Object.getPrototypeOf(t)).toBe(Temperature.prototype);
-    });
     test('add entry to temp', () => {
       let s = new Sensor(myEnum.TEMPERATURE);
+      let t = s.getSensor();
+      t.addEntry(20, "name");
+      expect(t.labels()).toStrictEqual(["name"]);
+      expect(t.values()).toStrictEqual([20]);
+      expect(t.lastValue()).toStrictEqual([20, "name"]);
+    });
+    test('Creating a humidity sensor', () => {
+      let s = new Sensor(myEnum.HUMIDITY);
+      let t = s.getSensor();
+      expect(Object.getPrototypeOf(t)).toBe(Humidity.prototype);
+    });
+    test('add entry to humidity', () => {
+      let s = new Sensor(myEnum.HUMIDITY);
+      let t = s.getSensor();
+      t.addEntry(20, "name");
+      expect(t.labels()).toStrictEqual(["name"]);
+      expect(t.values()).toStrictEqual([20]);
+      expect(t.lastValue()).toStrictEqual([20, "name"]);
+    });
+    test('Creating a light sensor', () => {
+      let s = new Sensor(myEnum.LIGHT);
+      let t = s.getSensor();
+      expect(Object.getPrototypeOf(t)).toBe(Light.prototype);
+    });
+    test('add entry to light', () => {
+      let s = new Sensor(myEnum.LIGHT);
       let t = s.getSensor();
       t.addEntry(20, "name");
       expect(t.labels()).toStrictEqual(["name"]);
@@ -97,12 +118,12 @@ describe('Sensor model tests', () => {
     });
     test('adding a value', () => {
       let d = new Datnum();
-      d.Singlevalue = 5;
-      expect(d.Singlevalue).toBe(5);
+      d.singlevalue = 5;
+      expect(d.singlevalue).toBe(5);
     });
     test('adding a wrong value', () => {
       let d = new Datnum();
-      expect(() => d.Singlevalue = "test").toThrow();
+      expect(() => d.singlevalue = "test").toThrow();
     });
   });
 });

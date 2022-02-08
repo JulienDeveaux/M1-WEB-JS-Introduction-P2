@@ -104,10 +104,46 @@ export class Temperature extends Sensor {
   }
 }
 export class Humidity extends Sensor {
+  constructor() {
+    super();
+  }
 
+  addEntry(value, label) {
+    super.addEntry(value, label);
+  }
+
+  labels() {
+    return super.labels();
+  }
+
+  values() {
+    return super.values();
+  }
+
+  lastValue() {
+    return super.lastValue();
+  }
 }
 export class Light extends Sensor {
+  constructor() {
+    super();
+  }
 
+  addEntry(value, label) {
+    super.addEntry(value, label);
+  }
+
+  labels() {
+    return super.labels();
+  }
+
+  values() {
+    return super.values();
+  }
+
+  lastValue() {
+    return super.lastValue();
+  }
 }
 export class Switch extends Sensor {
 
@@ -153,21 +189,21 @@ export class TimeSeries extends Data {
 }
 
 export class Datnum extends Data {
-  #Singlevalue;
+  #singlevalue;
 
   constructor() {
     super();
-    this.#Singlevalue = 0;
+    this.#singlevalue = 0;
   }
 
-  set Singlevalue(value) {
+  set singlevalue(value) {
     if(typeof value !== "number") {
       throw new Error("value must be a number");
     }
-    this.#Singlevalue = value;
+    this.#singlevalue = value;
   }
 
-  get Singlevalue() {
-    return this.#Singlevalue;
+  get singlevalue() {
+    return this.#singlevalue;
   }
 }
