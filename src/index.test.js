@@ -33,10 +33,15 @@ describe('Sensor model tests', () => {
 
   describe('Dummy tests', () => {
     test('data is loaded with 3 elements', () => {
-      expect(data.length).toBe(3);
+      expect(data.length).toBe(6);
     });
     test('version number from the model', () => {
       expect(version()).toBe('1.0.0');
+    });
+    test("enum for of", () => {
+      for(let i of myEnum) {
+        expect(i).toBeDefined();
+      }
     });
   });
 

@@ -41,5 +41,30 @@
         "2021-01-19T10:25:00.000Z"
       ]
     }
+  },
+  {
+    "id": 3,
+    "name": "Capteur d'humidité",
+    "type": "HUMIDITY",
+    "data": {
+      "values": [0, 1, 2, 3],
+      "labels": ["01", "02", "03", "04"]
+    }
+  },
+  {
+    "id": 8,
+    "name": "lumière ext",
+    "type": "LIGHT",
+    "data": {
+      "value": 1
+    }
+  },
+  {
+    "id": 4,
+    "name": "switch ext",
+    "type": "SWITCH",
+    "data": {
+      "value": 0
+    }
   }
 ]
